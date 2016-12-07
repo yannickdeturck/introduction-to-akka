@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Introduction to Akka - JWorks - Yannick De Turck</title>
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/ordina.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <script src="js/head.min.js"></script>
+    <!--Add support for earlier versions of Internet Explorer -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>Introduction to Akka</h1>
+                <h3>Build powerful concurrent & distributed applications more easily.</h3>
+                <img src="img/jworks-logo.png" style="vertical-align: bottom;" width="22.5%"/>
+
+                <aside class="notes">
+                    <p>Point of the presentation is to give an introduction to the basics of developing an Akka application without going to deep into details</p>
+                    <p>If people are interested we'll do a 2nd sessions for getting more in detail</p>
+                </aside>
+            </section>
+
+            <section>
+                <h2>About me</h2>
+                <div>
+                    <img src="img/yannick.jpeg" style="float:left; width:300px; height:auto;"/>
+                    <p style="padding-top:40px">
+                        Yannick De Turck<br/>
+                        Java Developer<br />
+                        Scala and Play enthousiast <br />
+                        Ordina Belgium<br />
+                        <a href="https://twitter.com/yannickdeturck">@YannickDeTurck</a><br />
+                        <a href="https://github.com/YannickDeTurck">https://github.com/YannickDeTurck</a>
+                    </p>
+                </div>
+            </section>
+
+            <!-- **********
+                EDIT FROM HERE
+            ********** -->
+
+            <!-- VANAF HIER BEGINNEN -->
+
+            <section>
+                <section data-background="#DF6F0C">
+                    <h2 style="color: #fff;">What is Akka?</h2>
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>A toolkit, not a framework</h2>
+                    <p>Integrate it without having to follow a source code layout</p>
+                    <aside class="notes">
+                        <p>You integrate it into your build like any other library without having to follow a particular source code layout</p>
+                        <p>Founded by Jonas Bonér and part of Lightbend's Reactive Platform stack</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>A single unified programming model for simpler</h2>
+                    <p>Concurrency</p>
+                    <p>Distribution</p>
+                    <p>Fault tolerance</p>
+
+                    <aside class="notes">
+                        <p>Fault Tolerance: Supervisor hierarchies with “let-it-crash” semantics and self-healing</p>
+                        <p>Akka aims to provide a better solution to concurrency, fault-tolerance, and distribution than traditional systems like the Java Enterprise Edition and Spring</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>No need to worry about</h2>
+                    <p>Shared state</p>
+                    <p>Threads</p>
+                    <p>Locks</p>
+                </section>
+
+                <section>
+                    <h2>Advantages by using Akka</h2>
+                    <p>High CPU utilization</p>
+                    <p>Illusion of coding single threaded</p>
+                    <p>Low latency</p>
+                    <p>High throughput</p>
+                    <p>Scalability</p>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Distributable by Design</h2>
+                    <p>Perfect Programming Model for the Cloud</p>
+                    <p><ul>
+                        <li>Elastic</li>
+                        <li>Self-healing</li>
+                        <li>Load-Balancing & cluster rebalancing</li>
+                    </ul></p>
+                    <p>From local to remote by configuration</p>
+
+                    <aside class="notes">
+                        <p>Elasticity: The degree to which a system is able to adapt to workload changes</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <img style="margin-top: -20px;" src="img/what-is-akka.png"/>
+
+                    <aside class="notes">
+                        <p>Akka provides scalable real-time transaction processing</p>
+                        <p>.NET port also available</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Use cases for Akka</h2>
+                    <p>Transaction processing</p>
+                    <p>Service backend</p>
+                    <p>Concurrency/parallelism</p>
+                    <p>Batch processing</p>
+
+                    <aside class="notes">
+                        <p>(Online Gaming, Finance/Banking, Trading, Statistics, Betting, Social Media, Telecom)</p>
+                        <p>Any system with the need for high-throughput and low latency is a good candidate for using Akka.</p>
+                        <p>Transaction processing: Scale up, scale out, fault-tolerance/HA</p>
+                        <p>Service BE: Service REST, SOAP, WebSockets etc Act as message hub / integration layer Scale up, scale out, fault-tolerance/HA</p>
+                        <p>Concurrency: Correct Simple to work with and understand Just add the jars to your existing JVM project (use Scala, Java, Groovy or JRuby)</p>
+                        <p>Batch: Camel integration to hook up with batch data sources Actors divide and conquer the batch workloads</p>
+                    </aside>
+                </section>
+            </section>
+
+            <section>
+                <section data-background="#DF6F0C">
+                    <h2 style="color: #fff;">The Actor Model</h2>
+
+                    <aside class="notes">
+                        <p>Originally implemented in Erlang 1986.</p>
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>The Actor Model</h2>
+                    <img style="margin-top: -20px;" src="img/actor-messaging.png"/>
+
+                    <aside class="notes">
+                        <p>Simple and high-level abstractions for distribution, concurrency and parallelism</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>What is an Actor?</h2>
+                    <p>Fundamental unit of computation that embodies</p>
+                    <ul>
+                        <li>Processing (Behaviour)</li>
+                        <li>Storage (State)</li>
+                        <li>Communication</li>
+                    </ul>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Actors</h2>
+                    <p>Represented by an ActorRef</p>
+                    <p>Ordered mailbox</p>
+                    <p>Asynchronous immutable messages</p>
+                    <p>One message handled at a time</p>
+                    <p>Unique address</p>
+
+                    <aside class="notes">
+                        <p>You never get access to an Actor instance</p>
+                        <p>Managing their own memory and behaviour</p>
+                        <p>Lightweight(400 Bytes, 2.7 Million Actors per GB)</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Actors</h2>
+                    <p>No shared state</p>
+                    <p>Change behaviour at runtime</p>
+                    <p>Start decoupled from threads</p>
+                    <p>Only occupy a thread when handling a message</p>
+                    <p>Extremely lightweight</p>
+
+                    <aside class="notes">
+                        <p>If they receive a message they will enqueue themselves on the dispatcher</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Architecture of an Actor</h2>
+                    <ul>
+                        <li>Handle messages</li>
+                        <li>Different behaviours</li>
+                        <li>Definition of <i>Props</i></li>
+                        <li>Lifecycle events</li>
+                    </ul>
+
+                    <aside class="notes">
+                        <p>Props can be seen as a reusable recipe of an actor</p>
+                        <p>You don't directly create an actor but actually create one based on Props, afterwards you get an ActorRef</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Reacting on messages</h2>
+                    <ul>
+                        <li>Sending messages</li>
+                        <li>Changing state</li>
+                        <li>Changing behaviour</li>
+                        <li>Creating more actors</li>
+                    </ul>
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Example of an Actor</h2>
+                    <p>Java</p>
+                    <pre><code class="java" data-trim data-noescape>
+public class HelloWorld extends AbstractLoggingActor {
+    static class Hello {
+    }
+
+    public HelloWorld(){
+        receive(ReceiveBuilder
+                .match(Hello.class, this::onHello)
+                .build()
+        );
+    }
+
+    private void onHello(Hello hello) {
+        log().info("Hello world!");
+    }
+
+    public static Props props() {
+        return Props.create(HelloWorld.class);
+    }
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Example of an Actor</h2>
+                    <p>Scala</p>
+                    <pre><code class="java" data-trim data-noescape>
+class HelloWorld extends Actor with ActorLogging {
+  override def receive: Receive = {
+    case HelloWorld.Hello =>
+      log.info("Hello world!")
+  }
+}
+
+object HelloWorld {
+  val props = Props[HelloWorld]
+  case class Hello()
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Demo</h2>
+                    <p>Creating a basic Actor and sending messages</p>
+                    <p>Defining behaviour</p>
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+            </section>
+
+            <section>
+                <section data-background="#DF6F0C">
+                    <h2 style="color: #fff;">The Actor Hierarchy</h2>
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>The Actor Hierarchy</h2>
+                    <img style="margin-top: -20px;" src="img/actor-hierarchy.png"/>
+
+                    <aside class="notes">
+                        <p>The 'user' guardian always exists, created by the system when it starts</p>
+                        <p>A child will never outlive its parent and will shut down if its parent shuts down</p>
+                    </aside>
+                </section>
+            </section>
+
+            <section>
+                <section data-background="#DF6F0C">
+                    <h2 style="color: #fff;">Supervision</h2>
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Supervision</h2>
+                    <img style="margin-top: -20px;" src="img/actor-supervising.png"/>
+
+                    <aside class="notes">
+                        <p>Parent handles the failures encountered by the child and decides on the action to undertake</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>The classic way of failure handling</h2>
+                    <p>Caller handles the failure leading to defensive programming</p>
+                    <ul>
+                        <li>Error handling mixed with business logic</li>
+                        <li>Error handling scattered all over the code base</li>
+                    </ul>
+
+                    <aside class="notes">
+                        <p>The failure should be sent where it can be dealt with, have the supervisor handle it</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Supervising</h2>
+                    <p>Child doesn't need to care</p>
+                    <p>Parent decides what will happen</p>
+                    <p>Clean separation of processing and error handling</p>
+
+                    <aside class="notes">
+                        <p>Based on the strategy used</p>
+                        <p>The supervisor delegates tasks to subordinates and therefore must respond to their failures.</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Actor Lifecycle</h2>
+                    <ul>
+                        <li><b>Resume</b>: Ignore the failure and keep processing messages</li>
+                        <li><b>Stop</b>: Shutdown the actor</li>
+                        <li><b>Restart</b>: Restart the child together with its state</li>
+                        <li><b>Escalate</b>: Escalate the failure higher up the chain to handle</li>
+                    </ul>
+
+                    <aside class="notes">
+                        <p>Any outside ActorRefs will point to the new instance leading to the self-healing characteristic</p>
+                        <p>Deadletter office: Messages with unknown recipients are sent here</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Supervisor Strategies</h2>
+                    <ul>
+                        <li>ActorInitializationException → Stop</li>
+                        <li>ActorKilledException → Stop</li>
+                        <li>Exception → Restart</li>
+                        <li>Throwable → Escalate</li>
+                        <li>...</li>
+                        <li>Otherwise → Escalate</li>
+                    </ul>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Defining a strategy</h2>
+                    <p>Java</p>
+                    <pre><code class="java" data-trim data-noescape>
+public class Supervisor extends UntypedActor {
+    private static SupervisorStrategy strategy =
+        new OneForOneStrategy(10, Duration.create("1 minute"),
+            t -> {
+                if (t instanceof ArithmeticException)
+                    return resume();
+                else if (t instanceof NullPointerException)
+                    return restart();
+                else
+                    return escalate();
+            });
+
+    @Override
+    public SupervisorStrategy supervisorStrategy() {
+        return strategy;
+    }
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Defining a strategy</h2>
+                    <p>Scala</p>
+                    <pre><code class="java" data-trim data-noescape>
+class Supervisor extends Actor {
+  override val supervisorStrategy = OneForOneStrategy(
+      maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+    case _: ArithmeticException  => Resume
+    case _: NullPointerException => Restart
+    case _: Exception            => Escalate
+  }
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Demo</h2>
+                    <p>Defining a custom strategy</p>
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+            </section>
+
+            <section>
+                <section data-background="#DF6F0C">
+                    <h2 style="color: #fff;">Configuration</h2>
+
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>application.conf</h2>
+                    <p>Logging</p>
+                    <p>Routing</p>
+                    <p>Remote deployment</p>
+                    <p>Dispatchers</p>
+                    <p>Debug settings</p>
+                    <p>...</p>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>application.conf</h2>
+                    <pre><code data-trim data-noescape>
+akka {
+  loglevel = debug
+
+  actor {
+    deployment {
+      /coffee-house/barista {
+        router = round-robin-pool
+        nr-of-instances = 5
+      }
+    }
+    default-dispatcher {
+      fork-join-executor {
+        parallelism-min = 4
+        parallelism-factor = 2.0
+        parallelism-max = 64
+      }
+      throughput = 5
+    }
+  }
+}
+                    </code></pre>
+
+                    <aside class="notes">
+                        <p>"Human-Optimized Config Object Notation" or HOCON</p>
+                        <p>See http://doc.akka.io/docs/akka/current/general/configuration.html for the whole list!</p>
+                    </aside>
+                </section>
+            </section>
+
+            <section>
+                <h2>Demo: Pizza ordering system</h2>
+                <img style="margin-top: -20px;" src="img/pizza-ordering.png"/>
+
+                <aside class="notes">
+                </aside>
+            </section>
+            </section>
+
+            <section>
+                <h2>What else is there?</h2>
+                <p>Akka Cluster</p>
+                <p>Akka Streams</p>
+                <p>Akka HTTP</p>
+                <p>Akka Typed (under development)</p>
+
+                <aside class="notes">
+                    <p>
+                        Akka cluster<br/>
+                            Fault-tolerant decentralized peer-to-peer based cluster membership service with no single point of failure or single point of bottleneck.<br/>
+                        Akka Streams<br/>
+                            Intuitive and safe way to formulate stream processing setups<br/>
+                        Akka HTTP<br/>
+                            An Actor-based toolkit for interacting with web services and clients<br/>
+                        Akka Typed (under development)<br/>
+                            Brings typesafety to Actors
+                    </p>
+                </aside>
+            </section>
+
+            <section>
+                <h2>Try out Akka yourself!</h2>
+                <p><a href="http://akka.io">http://akka.io</a></p>
+
+                <aside class="notes">
+                    <p></p>
+                </aside>
+            </section>
+
+            <section>
+                <h2>Slides and code samples</h2>
+                <p><a href="https://github.com/yannickdeturck/introduction-to-akka">https://github.com/yannickdeturck/introduction-to-akka</a></p>
+
+                <aside class="notes">
+                    <p></p>
+                </aside>
+            </section>
+
+            <!-- **********
+                DO NOT REMOVE
+            ********** -->
+            <section style="text-align: left;">
+                <h2>Thanks for watching!</h2>
+            </section>
+
+            <section style="text-align: left;" data-background="img/jworks-wallpaper-3.jpg"></section>
+        </div>
+    </div>
+    <script src="js/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            transition: 'convex',
+            dependencies: [
+                // Cross-browser shim that fully implements classList - https://github.com/eligrey/classList.js/
+                {
+                    src: 'lib/js/classList.js',
+                    condition: function () {
+                        return !document.body.classList;
+                    }
+                },
+                // Interpret Markdown in <section> elements
+                {
+                    src: 'plugin/markdown/marked.js',
+                    condition: function() {
+                        return !!document.querySelector( '[data-markdown]' );
+                    }
+                },
+                {
+                    src: 'plugin/markdown/markdown.js',
+                    condition: function() {
+                        return !!document.querySelector( '[data-markdown]' );
+                    }
+                },
+                // Syntax highlight for <code> elements
+                {
+                    src: 'plugin/highlight/highlight.js',
+                    async: true,
+                    callback: function () {
+                        hljs.initHighlightingOnLoad();
+                    }
+                },
+                // Zoom in and out with Alt+click
+                {
+                    src: 'plugin/zoom-js/zoom.js',
+                    async: true
+                },
+                // Speaker notes
+                {
+                    src: 'plugin/notes/notes.js',
+                    async: true
+                }
+        ]
+        });
+    </script>
+</body>
+
+</html>
