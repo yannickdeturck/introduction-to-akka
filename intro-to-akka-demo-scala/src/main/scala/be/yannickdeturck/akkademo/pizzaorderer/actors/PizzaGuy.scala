@@ -3,7 +3,7 @@ package be.yannickdeturck.akkademo.pizzaorderer.actors
 import akka.actor.{Actor, ActorLogging, Props}
 
 class PizzaGuy extends Actor with ActorLogging{
-  val preparedPizzas: Seq[String] = Seq()
+  var preparedPizzas: Seq[String] = Seq()
   override def receive: Receive = {
     case PizzaGuy.TakeOrder(address, pizzas) =>
       log.info(s"Received order $pizzas to be sent at $address")
@@ -13,7 +13,7 @@ class PizzaGuy extends Actor with ActorLogging{
       self ! PizzaGuy.DeliverPizzas(address)
     case PizzaGuy.PreparePizza(pizza) =>
       log.info(s"Preparing a pizza $pizza")
-      preparedPizzas :+ pizza
+      preparedPizzas :+=  pizza
     case PizzaGuy.DeliverPizzas(address) =>
       log.info(s"Delivering pizza order of $preparedPizzas to $address")
       context.parent ! Office.KnockDoor(preparedPizzas)
