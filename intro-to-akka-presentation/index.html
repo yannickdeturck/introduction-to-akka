@@ -33,8 +33,8 @@
                 <img src="img/jworks-logo.png" style="vertical-align: bottom;" width="22.5%"/>
 
                 <aside class="notes">
-                    <p>Point of the presentation is to give an introduction to the basics of developing an Akka application without going to deep into details</p>
-                    <p>If people are interested we'll do a 2nd sessions for getting more in detail</p>
+                    <p>Point of the presentation is to give an introduction to the basics of developing an Akka application without going too deep into details</p>
+                    <p>If people are interested we'll do a second session to dig deeper into Akka.</p>
                 </aside>
             </section>
 
@@ -83,8 +83,9 @@
                     <p>Fault tolerance</p>
 
                     <aside class="notes">
+                        <p>Concurrency: We want to utilise multi-core processors as much as possible</p>
+                        <p>Distribution: Distribution over multiple nodes</p>
                         <p>Fault Tolerance: Supervisor hierarchies with “let-it-crash” semantics and self-healing</p>
-                        <p>Akka aims to provide a better solution to concurrency, fault-tolerance, and distribution than traditional systems like the Java Enterprise Edition and Spring</p>
                     </aside>
                 </section>
 
@@ -93,18 +94,22 @@
                     <p>Shared state</p>
                     <p>Threads</p>
                     <p>Locks</p>
+
+                    <aside class="notes">
+                        <p></p>
+                    </aside>
                 </section>
 
                 <section>
                     <h2>Advantages by using Akka</h2>
-                    <p>High CPU utilization</p>
                     <p>Illusion of coding single threaded</p>
+                    <p>High CPU utilization</p>
                     <p>Low latency</p>
                     <p>High throughput</p>
                     <p>Scalability</p>
 
                     <aside class="notes">
-                        <p></p>
+                        <p>Scaling: Both horizontal scaling (more machines) and vertical scaling (CPU, RAM)</p>
                     </aside>
                 </section>
 
@@ -140,12 +145,8 @@
                     <p>Batch processing</p>
 
                     <aside class="notes">
-                        <p>(Online Gaming, Finance/Banking, Trading, Statistics, Betting, Social Media, Telecom)</p>
-                        <p>Any system with the need for high-throughput and low latency is a good candidate for using Akka.</p>
-                        <p>Transaction processing: Scale up, scale out, fault-tolerance/HA</p>
-                        <p>Service BE: Service REST, SOAP, WebSockets etc Act as message hub / integration layer Scale up, scale out, fault-tolerance/HA</p>
-                        <p>Concurrency: Correct Simple to work with and understand Just add the jars to your existing JVM project (use Scala, Java, Groovy or JRuby)</p>
-                        <p>Batch: Camel integration to hook up with batch data sources Actors divide and conquer the batch workloads</p>
+                        <p>Online Gaming, Finance/Banking, Trading, Statistics, Betting, Social Media, Telecom</p>
+                        <p>Any system with the need for high-throughput and low latency</p>
                     </aside>
                 </section>
             </section>
@@ -155,8 +156,9 @@
                     <h2 style="color: #fff;">The Actor Model</h2>
 
                     <aside class="notes">
-                        <p>Originally implemented in Erlang 1986.</p>
-                        <p></p>
+                        <p>Originally implemented in Erlang 1986</p>
+                        <p>An actor is the primitive unit of computation</p>
+                        <p>It receives a message and does some kind of computation based on it</p>
                     </aside>
                 </section>
 
@@ -165,7 +167,7 @@
                     <img style="margin-top: -20px;" src="img/actor-messaging.png"/>
 
                     <aside class="notes">
-                        <p>Simple and high-level abstractions for distribution, concurrency and parallelism</p>
+                        <p>Simple and high-level abstraction for distribution, concurrency and parallelism</p>
                     </aside>
                 </section>
 
@@ -194,7 +196,6 @@
                     <aside class="notes">
                         <p>You never get access to an Actor instance</p>
                         <p>Managing their own memory and behaviour</p>
-                        <p>Lightweight(400 Bytes, 2.7 Million Actors per GB)</p>
                     </aside>
                 </section>
 
@@ -208,6 +209,7 @@
 
                     <aside class="notes">
                         <p>If they receive a message they will enqueue themselves on the dispatcher</p>
+                        <p>Lightweight(400 Bytes, 2.7 Million Actors per GB)</p>
                     </aside>
                 </section>
 
@@ -236,6 +238,7 @@
                     </ul>
 
                     <aside class="notes">
+                        <p>Deadletter synthetic actor: Messages with unknown recipients are sent here</p>
                     </aside>
                 </section>
 
@@ -328,15 +331,6 @@ object HelloWorld {
                 </section>
 
                 <section>
-                    <h2>Supervision</h2>
-                    <img style="margin-top: -20px;" src="img/actor-supervising.png"/>
-
-                    <aside class="notes">
-                        <p>Parent handles the failures encountered by the child and decides on the action to undertake</p>
-                    </aside>
-                </section>
-
-                <section>
                     <h2>The classic way of failure handling</h2>
                     <p>Caller handles the failure leading to defensive programming</p>
                     <ul>
@@ -346,6 +340,15 @@ object HelloWorld {
 
                     <aside class="notes">
                         <p>The failure should be sent where it can be dealt with, have the supervisor handle it</p>
+                    </aside>
+                </section>
+
+                <section>
+                    <h2>Supervision</h2>
+                    <img style="margin-top: -20px;" src="img/actor-supervising.png"/>
+
+                    <aside class="notes">
+                        <p>Parent handles the failures encountered by the child and decides on the action to undertake</p>
                     </aside>
                 </section>
 
@@ -372,7 +375,6 @@ object HelloWorld {
 
                     <aside class="notes">
                         <p>Any outside ActorRefs will point to the new instance leading to the self-healing characteristic</p>
-                        <p>Deadletter office: Messages with unknown recipients are sent here</p>
                     </aside>
                 </section>
 
@@ -519,16 +521,11 @@ akka {
                 <p>Akka Typed (under development)</p>
 
                 <aside class="notes">
-                    <p>
-                        Akka cluster<br/>
-                            Fault-tolerant decentralized peer-to-peer based cluster membership service with no single point of failure or single point of bottleneck.<br/>
-                        Akka Streams<br/>
-                            Intuitive and safe way to formulate stream processing setups<br/>
-                        Akka HTTP<br/>
-                            An Actor-based toolkit for interacting with web services and clients<br/>
-                        Akka Typed (under development)<br/>
-                            Brings typesafety to Actors
-                    </p>
+                    <p>Akka cluster: Fault-tolerant decentralized peer-to-peer based cluster membership service</p>
+                    <p>Akka Streams: Stream processing</p>
+                    <p>Akka HTTP: An Actor-based toolkit for interacting with web services and clients</p>
+                    <p>Akka Typed: Typesafety</p>
+                    <p>Also integration with Camel for example</p>
                 </aside>
             </section>
 
