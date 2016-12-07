@@ -35,10 +35,10 @@ public class Office extends AbstractLoggingActor {
         return Props.create(Office.class);
     }
 
-    private ActorRef consultant;
+    private ActorRef developer;
 
     public Office() {
-        consultant = getContext().actorOf(Developer.props("Yannick"), "actor-yannick");
+        developer = getContext().actorOf(Developer.props("Yannick"), "actor-yannick");
 
         receive(ReceiveBuilder
                 .match(StartWorkshop.class, this::onStartWorkshop)
@@ -50,7 +50,7 @@ public class Office extends AbstractLoggingActor {
 
     private void onStartWorkshop(StartWorkshop message) {
         log().info("Starting workshop...");
-        consultant.tell(new Developer.StartOrdering(), self());
+        developer.tell(new Developer.StartOrdering(), self());
     }
 
     private void onReceiveOrder(ReceiveOrder message) {
@@ -63,7 +63,7 @@ public class Office extends AbstractLoggingActor {
     private void onKnockDoor(KnockDoor message) {
         log().info("Paying the pizzaguy {} and accepting the pizzas {}", sender(), message.orderedPizzas);
         getContext().stop(sender());
-        log().info("Informing the consultant {}...", consultant);
-        consultant.tell(new Developer.PizzaHasArrived(message.orderedPizzas), sender());
+        log().info("Informing the developer {}...", developer);
+        developer.tell(new Developer.PizzaHasArrived(message.orderedPizzas), sender());
     }
 }

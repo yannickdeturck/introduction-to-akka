@@ -13,7 +13,6 @@ object Example2Behaviour extends App {
 }
 
 class Door extends Actor with ActorLogging {
-
   override def receive: Receive = closed
 
   def open: Receive = {
